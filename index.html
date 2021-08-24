@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="../2d-iot-webpage-online/css/main.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
+        <!-- boostrap -->
+        <link
+            rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+            crossorigin="anonymous"
+        />
+
+        <!-- for table data -->
+        <script src="../2d-iot-webpage-online/js/table.js"></script>
+
+        <!-- for chart data -->
+        <script
+            type="module"
+            src="../2d-iot-webpage-online/js/chart.js"
+        ></script>
+
+        <!-- nodemailer -->
+        <script src="https://unpkg.com/nodemailer@6.6.3/lib/nodemailer.js"></script>
+        <title>CO2 meter</title>
+    </head>
+    <body>
+        <div class="nav-bar">
+            <h1>this is CO2 real time meter</h1>
+            <span class="login">
+                <a href="../2d-iot-webpage-online/html/login.html"> login </a>
+                <a href="../2d-iot-webpage-online/html/register.html">
+                    register
+                </a>
+            </span>
+            <div>
+                <form action="/logout" method="get">
+                    <input type="submit" value="logout" />
+                </form>
+            </div>
+        </div>
+
+        <p>
+            the meter will update every 60 second or you can update it instantly
+            by clicking <span>get CO2ppm instant</span>, or reset through
+            clicking <span>reset</span>. <span>Login</span> for the mail
+            service.
+        </p>
+        <div class="middle-part">
+            <div class="dataViewer" style="overflow-y: auto">
+                <div class="dataViewer-table">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">time</th>
+                                <th scope="col">CO2(ppm)</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <!-- <form action="/CO2" method="GET"> -->
+                <div class="table-selection-bar">
+                    <input
+                        class="btn btn-light"
+                        id="getValue"
+                        type="submit"
+                        value="get CO2ppm instant"
+                    />
+                    <input
+                        class="btn btn-light"
+                        id="resetValue"
+                        type="submit"
+                        value="reset"
+                    /><br />
+                </div>
+            </div>
+
+            <div class="line-chart-bar">
+                <canvas id="myChart" style="width: 100%"></canvas>
+                <div class="line-chart-bar-query">
+                    <select
+                        name="time-query"
+                        id="time-query"
+                        class="custom-select"
+                    >
+                        <option value="1-hour">1 hour</option>
+                        <option value="5-hours">5 hours</option>
+                        <option value="10-hours">10 hours</option>
+                        <option value="1-day">1 day</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- </form> -->
+        <script>
+            // mail service check 1 time per 0.5 hour
+            $(document).ready(function () {
+                $.ajax({
+                    url: "/api/mail",
+                    type: "get",
+                    success: function () {
+                        console.log("success");
+                    },
+                });
+                setTimeout(1800000);
+            });
+        </script>
+    </body>
+</html>
